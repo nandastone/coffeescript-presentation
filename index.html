@@ -1,0 +1,453 @@
+<!doctype html>  
+<html lang="en">
+    
+    <head>
+        <meta charset="utf-8">
+        
+        <title>CoffeeScript &ndash; Why you should care</title>
+
+        <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+        <meta name="author" content="Hakim El Hattab">
+
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        
+        <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/theme/default.css">
+
+        <!-- For syntax highlighting -->
+        <link rel="stylesheet" href="lib/css/zenburn.css">
+    </head>
+    
+    <body>
+        
+        <div class="reveal">
+
+            <!-- Used to fade in a background when a specific slide state is reached -->
+            <div class="state-background"></div>
+            
+            <!-- Any section element inside of this container is displayed as a slide -->
+            <div class="slides">
+                <section>
+                    <h1>CoffeeScript</h1>
+                    <h3>Why you should care</h3>
+                </section>
+                
+                
+
+                <!-- WHAT IS COFFEE? -->
+                <section>
+                    <h2>What is CoffeeScript?</h2>
+                    <p>CoffeeScript is an <i>alternative syntax</i> for JavaScript. It doesn't add features to the language.</p>
+                    <p class="fragment">CoffeeScript is compiled one-to-one into equivalent JavaScript. No special software is required to run CoffeeScript. It will work seamlessly with any existing JavaScript.</p>
+                    <p class="fragment">CoffeeScript was created by Jeremey Ashkenas, who is also responsible for Backbone.js and Underscore.js.</p>
+                    <p class="fragment"><a href="http://coffeescript.org/">http://coffeescript.org/</a></p>
+                </section>
+
+                
+
+                <!-- WHAT'S WRONG WITH JS? -->
+                <section>
+                    <section>
+                        <h2>Why an alternative syntax?</h2>
+                        <p>JavaScript makes me &#9786;, but it also makes me &#9785;.</p>
+                    </section>
+
+                    <section>
+                        <h2>Global scope</h2>
+                        <p>
+                            JavaScript only has <strong>function</strong> scope. Combined with the <strong>scope chain</strong>
+                            we can get ourselves in trouble.
+                        </p>
+                        <pre><code contenteditable>
+catSays = 'meow';
+
+alert(catSays);     // 'meow'
+
+function catShout(speak) {
+    catSays = speak.toUpperCase();
+    alert(catSays);
+}
+
+catShout('woof');   // 'WOOF'
+
+alert(catSays);     // 'WOOF'
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Braces and semicolons</h2>
+                        <p>They're pointless if you're writing readable code, and not trying to be too clever for your own good. Let a minifier do the optimisation.</p>
+                    </section>
+
+                    <section>
+                        <h2>Lack of useful array/object methods</h2>
+                        <p>There isn't much support for array/object iterators such as each, map, filter. Extending the native Object.prototype is <strong>BAD</strong>.</p>
+                    </section>
+
+                    <section>
+                        <h2>Comparison operators</h2>
+                        <p>JavaScript has strange rules for determining truthy/falsiness. Unless you've memorised the rules, always use the strict comparison operators.</p>
+                        <pre><code contenteditable>
+'' == '0'           // false
+0 == ''             // true
+0 == '0'            // true
+
+false == 'false'    // false
+false == '0'        // true
+
+false == undefined  // false
+false == null       // false
+null == undefined   // true
+
+' \t\r\n ' == 0     // true
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Classes and Objects</h2>
+                        <p>JavaScript prototypal inheritence is powerful, but can be hard to understand.</p>
+                        <p class="fragment">Its flexibility allows many inheritence styles, but in reality we usually want to use classes. Achieving this requires boilerplate.</p>
+                    </section>
+
+                    <section>
+                        <h2>Flexibility</h2>
+                        <p>JavaScript is incredibly flexible and is often used in the wrong way. There can be too many paths to success.</p>
+                    </section>
+                </section>
+
+                
+
+                <!-- WHAT DOES COFFEE DO? -->
+                <section>
+                    <h2>How does CoffeeScript help?</h2>
+                    <ul>
+                        <li class="fragment">Easier syntax</li>
+                        <li class="fragment">Encourages best practices</li>
+                        <li class="fragment">Prevents JavaScript anti-patterns</li>
+                    </ul>
+                </section>
+
+                
+
+                <!-- EASIER SYNTAX -->
+                <section>
+                    <section>
+                        <h2>CoffeeScript has an easier syntax</h2>
+                        <p>The syntax is where we spend our time. It needs sugar. We need sugar.</p>
+                    </section>
+
+                    <section>
+                        <h2>Significant whitespace</h2>
+                        <pre><code contenteditable>
+# global scope
+func = ->
+  # function scope
+  one = 1
+  doSomething()
+
+# back to global scope
+func()
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>No semicolons</h2>
+                        <pre><code contenteditable>
+num = 1
+myFunc(num)
+obj = { greeting: 'hello' }
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Declaring functions</h2>
+                        <p>CoffeeScript uses an alternative syntax for declaring named function expressions.</p>
+                        <pre><code contenteditable>
+addTogether = (val1, val2) ->
+  val1 + val2
+
+addTogether(2, 3)     # 5
+                        </code></pre>
+                        <aside class="notes">
+                          Due to various issues with variable hoisting, only named function expressions are available.
+                          The last expression is returned from a function.
+                      </aside>
+                    </section>
+
+                    <section>
+                        <h2>Default function parameters</h2>
+                        <pre><code contenteditable>
+addTogether = (val1, val2 = 1) ->
+  return val1 + val2
+
+addTogether(2)        # 3
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Function parentheses</h2>
+                        <p>Function parentheses are optional when calling functions, and if there are no parameters in a function signature.</p>
+                        <pre><code contenteditable>
+simpleFunction = ->
+  'hello'
+
+doubleNumber = (num) ->
+  num * 2
+
+simpleFunction()                      # 'hello'
+Math.floor doubleNumber 6             # 12
+Math.floor doubleNumber(6)
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Splats</h2>
+                        <p>CoffeeScripts supports a variable number of function parameters, similar to Python's <i>kwargs</i>.</p>
+                        <pre><code contenteditable>
+awardMedals = (first, second, others...) ->
+  gold   = first    # "Usain Bolt"
+  silver = second   # "Michael Phelps"
+  rest   = others   # ["Mitermay Reis", "Scott Swabey"]
+
+awardMedals "Usain Bolt", "Michael Phelps", "Mitermay Reis", "Scott Swabey"
+
+contenders = ["Usain Bolt", "Michael Phelps", "Mitermay Reis", "Scott Swabey"]
+
+awardMedals contenders...
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Automatic scope</h2>
+                        <p>Variables are automatically hoisted and declared within their scope. <i>var</i> is no longer needed. It's impossible to shadow external variables.</p>
+                        <pre><code contenteditable>
+outer = 1
+doSomething = ->
+    inner = 2
+    outer = 3
+                        </code></pre>
+                        <pre><code contenteditable>
+var doSomething, outer;
+
+outer = 1;
+
+doSomething = function() {
+  var inner;
+  inner = 2;
+  outer = 3;
+};
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>'this' and scope management</h2>
+                        <pre><code contenteditable>
+function Loader() {
+  this.loaded = false;
+
+  $('#loader').fadeIn(function() {
+    this.loaded = true; // oops!
+  });
+}
+                        </code></pre>
+                        <pre><code contenteditable>
+Loader = ->
+  @loaded = false
+
+  $('#loader').fadeIn =>
+    @loaded = true
+                        </code></pre>
+                        <aside class="notes">
+                          'this' drops down into the scope through the fat arrow. Thanks fat arrow!
+                      </aside>
+                    </section>
+
+                    <section>
+                        <h2>Loops</h2>
+                        <p>Looping is a common task, and for loops are just ugly and boring. CoffeeScript offers simple alternatives for arrays and objects.</p>
+                        <pre><code contenteditable>
+eat = (food) ->
+  "nom nom"
+
+eat food for food in ['toast', 'cheese', 'cake']
+
+foods = ['broccoli', 'spinach', 'chocolate']
+eat food for food in foods when food isnt 'chocolate'
+                        </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>Comprehensions</h2>
+                        <p>Comprehensions are loops that result in an expression - usually another list. </p>
+                        <pre><code contenteditable>
+athleteWeights = [80, 92, 77, 102, 55]
+
+allowed = (weight for weight in athleteWeights when weight < 90)
+
+allowed # [80, 77, 55]
+                        </code></pre>
+                    </section>
+
+                    <section>
+                      <h2>Self-executing functions</h2>
+                      <pre><code contenteditable>
+# closure
+for dessert in ['cake', 'pie', 'trifle']
+  do (dessert) ->
+    $.post '/save', { dessert: dessert }, (response) ->
+      eat dessert # closure var
+      # ...
+
+# module
+cake = do ->
+  return {
+    eat: "nom nom"
+    throw: "splat"
+  }
+
+cake.eat          # "nom nom"
+                      </code></pre>
+                    </section>
+
+                    <section>
+                        <h2>String interpolation</h2>
+                        <pre><code contenteditable>
+author = "Wittgenstein"
+quote  = "A picture is a fact. -- #{ author }" # "A picture is a fact. -- Wittgenstein"
+                        </code></pre>
+                        <p>'nuff said.</p>
+                    </section>
+                </section>
+                
+
+                <!-- BEST PRACTICES -->
+                <section>
+                  <section>
+                      <h2>CoffeeScript encourages best practices</h2>
+                      <p>As we saw, there are many ways you can go wrong in JavaScript. In fact, the most famous JavaScript book (<a href="http://shop.oreilly.com/product/9780596517748.do" target="_blank">Javascript: The Good Parts</a>) is dedicated to avoiding common problems.</p>
+                  </section>
+
+                  <section>
+                      <h2>Left hand assignment</h2>
+                      <p>CoffeeScript assignment occurs on the left hand of conditional expressions. This forces you to break your code down into smaller DRY tasks. Your higher level methods will be more concise and readable.</p>
+                      <pre><code contenteditable>
+# yuck
+if content
+  _content = content
+  newContent _content
+  $('loader').html _content
+  # ...
+
+# nicer
+setNewContent content if content
+                      </code></pre>
+                  </section>
+
+                  <section>
+                    <h2>Preventing scope leak</h2>
+                    <p>CoffeeScript automatically wraps your file level code in an anonymous module. You need to manually export global references.</p>
+                    <pre><code contenteditable>
+root = this                 # 'this' === window
+coolThing = 'yes!'
+root.coolThing = coolThing  # export to global
+                    </code></pre>
+                    <pre><code contenteditable>
+(function() {
+
+var root, coolThing;
+
+root = this;                  // 'this' === window
+
+coolThing = 'yes!';
+root.coolThing = coolThing;   // export to global
+
+}).call(this);                // 'this' === window
+                    </code></pre>
+                  </section>
+
+                  <section>
+                    <h2>Safe comparison operators</h2>
+                    <p>CoffeeScript has english aliases for type safe comparison operators. The non type-safe operators are not available.</p>
+                    <table width="100%">
+                      <tr><td width="50%"><i>is</i></td><td width="50%"><i>===</i></td></tr>
+                      <tr><td width="50%"><i>isnt</i></td><td width="50%"><i>!==</i></td></tr>
+                      <tr><td width="50%"><i>not</i></td><td width="50%"><i>!</i></td></tr>
+                      <tr><td width="50%"><i>and</i></td><td width="50%"><i>&amp;&amp;</i></td></tr>
+                      <tr><td width="50%"><i>or</i></td><td width="50%"><i>||</i></td></tr>
+                      <tr><td width="50%"><i>true, yes, on</i></td><td width="50%"><i>true</i></td></tr>
+                      <tr><td width="50%"><i>false, no, off</i></td><td width="50%"><i>false</i></td></tr>
+                      <tr><td width="50%"><i>@, this</i></td><td width="50%"><i>this</i></td></tr>
+                    </table>
+                  </section>
+
+                  <section>
+                    <h2>Checking for undefined</h2>
+                    <p>The typeof operator in JavaScript is practically useless, beyond checking if a variable is defined or not. CoffeeScript has easy shortcuts for checking for the existence of variables.</p>
+                    <pre><code contenteditable>
+canEat = true if fork? and not cake.eaten
+
+hunger ?= 15
+
+champ = holler.developers?.alex?.getName()
+                    </code></pre>
+                  </section>
+
+                  <section>
+                    <h2>"Classy" objects</h2>
+                    <p class="fragment">CoffeeScript provides an easy interface for defining traditional classy objects.</p>
+                    <p class="fragment">These classy objects support class level properties, instance level properties, inheritence, and supering.</p>
+                    <p class="fragment"><a href="http://coffeescript.org/#classes">http://coffeescript.org/#classes</a></p>
+                    
+                  </section>
+                </section>
+
+                <section>
+                  <h2>Questions!?</h2>
+                </section>
+            </div>
+
+            <!-- The navigational controls UI -->
+            <aside class="controls">
+                <a class="left" href="#">&#x25C4;</a>
+                <a class="right" href="#">&#x25BA;</a>
+                <a class="up" href="#">&#x25B2;</a>
+                <a class="down" href="#">&#x25BC;</a>
+            </aside>
+
+            <!-- Presentation progress bar -->
+            <div class="progress"><span></span></div>
+            
+        </div>
+
+        <script src="lib/js/head.min.js"></script>
+        <script src="js/reveal.min.js"></script>
+
+        <script>
+            
+            // Full list of configuration options available here:
+            // https://github.com/hakimel/reveal.js#configuration
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                history: true,
+                
+                transition: Reveal.getQueryHash().transition || 'concave', // default/cube/page/concave/linear(2d)
+
+                // Optional libraries used to extend on reveal.js
+                dependencies: [
+                    { src: 'lib/js/highlight.js', async: true, callback: function() { window.hljs.initHighlightingOnLoad(); } },
+                    { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+                    { src: 'lib/js/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'lib/js/data-markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+                    { src: 'socket.io/socket.io.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
+                    { src: 'plugin/speakernotes/client.js', async: true, condition: function() { return window.location.host === 'localhost:1947'; } },
+                ]
+            });
+            
+        </script>
+
+    </body>
+</html>
